@@ -79,7 +79,7 @@ max_len = 200
 # ----------------------- Model & Assets -----------------------
 # ----------------------- Gemini API Setup -----------------------
 GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
-os.environ["GEMINI_API_KEY"] ="AIzaSyCRFgZy91BkZ8xXxHUhzdH5EDldLVFFdMU"
+os.environ["GEMINI_API_KEY"] =
 # ----------------------- Helper Functions -----------------------
 def clean_text(s):
     s = s.lower()
@@ -238,5 +238,6 @@ if send_button and user_input.strip():
     st.session_state.pop("text_box", None)  # safely remove the old key
     st.experimental_set_query_params(_clear="1")  # trigger UI rerun
     st.rerun()
+
 
 
