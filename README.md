@@ -114,9 +114,89 @@ Embedding (vocab_size=50,000, embedding_dim=128)
 
 ---
 
+
+
+
 ## 🧮 Example Inference
 ```python
 text = "I was charged twice for my subscription this month."
 prediction = predict_queue(text)
 print(prediction)
+```
+Gemini API Integration (optional extension)
 
+import google.generativeai as genai
+
+genai.configure(api_key="YOUR_GEMINI_API_KEY")
+
+prompt = f\"\"\"
+You are a customer support assistant.
+Write a short, polite reply acknowledging the user's issue about '{prediction['queue']}'.
+\"\"\"
+response = genai.GenerativeModel("gemini-1.5-pro").generate_content(prompt)
+print(response.text)
+Evaluation Metrics
+
+Accuracy – overall classification performance
+
+Precision, Recall, F1-Score – per-class performance
+
+Confusion Matrix – visualize misclassifications
+
+Quality of AI Replies – manually checked for empathy and politeness
+
+🧾 Deliverables
+
+✅ Python Source Code
+✅ Trained LSTM Model (best_lstm.h5)
+✅ english_only_tickets.csv Dataset
+✅ Project Report Documentation (PDF)
+✅ README.md (this file)
+✅ Sample Outputs (Predicted Queue + AI Reply)
+
+📂 Project Structure
+
+📁 Automatic-Ticket-Classification
+│
+├── english_only_tickets.csv
+├── model/
+│   └── best_lstm.h5
+├── main.ipynb
+├── README.md
+└── requirements.txt
+
+🧾 Requirements
+
+tensorflow
+numpy
+pandas
+matplotlib
+scikit-learn
+datasets
+google-generativeai
+
+Install dependencies with:
+
+pip install -r requirements.txt
+
+Key Takeaways
+
+Hands-on experience in Text Preprocessing, Tokenization, and Sequence Modeling
+
+Understanding of Many-to-One RNN (LSTM) for text classification
+
+Integration of Machine Learning + Generative AI for real-world automation
+
+Practical implementation of AI-driven customer support
+
+🏁 Final Output
+
+✅ Trained LSTM model predicting ticket category
+✅ Integrated AI replies via Gemini
+✅ Performance visualizations and reports
+✅ Production-ready pipeline for customer support automation
+
+👩‍💻 Author
+
+Ramya Ramadass
+Final Year — GUVI HCL Tech Project
