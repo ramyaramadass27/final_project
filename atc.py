@@ -91,11 +91,15 @@ GEMINI_API_URL = (
     "gemini-2.0-flash:generateContent"
 )
 
-# ✅ Load API key securely from Streamlit Secrets
-GEMINI_API_KEY = st.secrets.get("GEMINI_API_KEY")
+import os
+
+GEMINI_API_KEY = (
+    st.secrets.get("GEMINI_API_KEY")
+    or os.environ.get("GEMINI_API_KEY")
+)
 
 if not GEMINI_API_KEY:
-    st.error("❌ GEMINI_API_KEY not found. Please add it in Streamlit Secrets.")
+    st.error("❌ GEMINI_API_KEY not found. Please add it in Streamlit Environment Secrets.")
     st.stop()
 
 
