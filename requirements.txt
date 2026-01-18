@@ -1,8 +1,8 @@
 streamlit
-tensorflow
-numpy
-pandas
-scikit-learn
-pickle-mixin
-google-generativeai
+tensorflow==2.15.0
 keras
+numpy
+scikit-learn
+google-generativeai
+gdown
+requests
