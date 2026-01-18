@@ -1,3 +1,4 @@
+import gdown
 import streamlit as st
 import tensorflow as tf
 from keras.models import load_model
@@ -62,18 +63,27 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ----------------------- Model & Assets -----------------------
-model = load_model(
-    r"C:\Users\welcome\OneDrive\Desktop\streamlit\env\Scripts\best_lstm.h5",
-    compile=False
-)
+MODEL_PATH = "newone_bilstm.h5"
+TOKENIZER_PATH = "tokenizer.pkl"
+LABEL_ENCODER_PATH = "label_encoder.pkl"
 
-with open(r"C:\Users\welcome\OneDrive\Desktop\streamlit\env\Scripts\tokenizer.pkl", "rb") as f:
+MODEL_URL = "https://drive.google.com/uc?id=1AVKznHoqchDEbTN06-LC0NWexrHRnBY-"
+
+if not os.path.exists(MODEL_PATH):
+    with st.spinner("Downloading model... Please wait ⏳"):
+        gdown.download(MODEL_URL, MODEL_PATH, quiet=False)
+
+model = load_model(MODEL_PATH, compile=False)
+
+with open(TOKENIZER_PATH, "rb") as f:
     tokenizer = pickle.load(f)
 
-with open(r"C:\Users\welcome\OneDrive\Desktop\streamlit\env\Scripts\label_encoder.pkl", "rb") as f:
+with open(LABEL_ENCODER_PATH, "rb") as f:
     le = pickle.load(f)
 
 max_len = 300
+
+
 
 # ----------------------- Gemini API Setup (SECURE) -----------------------
 GEMINI_API_URL = (
