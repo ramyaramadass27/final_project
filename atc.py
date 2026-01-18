@@ -86,10 +86,7 @@ max_len = 300
 
 
 # ----------------------- Gemini API Setup (SECURE) -----------------------
-GEMINI_API_URL = (
-    "https://generativelanguage.googleapis.com/v1beta/models/"
-    "gemini-2.0-flash:generateContent"
-)
+GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"
 
 import os
 
@@ -120,17 +117,18 @@ def predict_queue(text):
     queue = le.inverse_transform([idx])[0]
     return {"queue": queue, "confidence": float(probs[idx])}
 
+import time
+
 def generate_reply_with_gemini(ticket_body, predicted_queue):
     prompt = f"""
 You are a professional and empathetic customer support representative.
 The customer's issue belongs to: {predicted_queue}.
-Write a short, helpful customer support reply (2 short paragraphs + closing line).
+Write a short, helpful customer support reply.
 
 Customer message: \"\"\"{ticket_body}\"\"\"
 """
 
     payload = {
-        "model": "gemini-2.0-flash",
         "contents": [{"parts": [{"text": prompt}]}]
     }
 
@@ -139,18 +137,26 @@ Customer message: \"\"\"{ticket_body}\"\"\"
         "x-goog-api-key": GEMINI_API_KEY
     }
 
-    try:
-        resp = requests.post(
-            GEMINI_API_URL,
-            headers=headers,
-            json=payload,
-            timeout=25
-        )
-        resp.raise_for_status()
-        data = resp.json()
-        return data["candidates"][0]["content"]["parts"][0]["text"].strip()
-    except Exception as e:
-        return f"(Failed to get Gemini reply: {e})"
+    for attempt in range(3):  # retry 3 times
+        try:
+            resp = requests.post(
+                GEMINI_API_URL,
+                headers=headers,
+                json=payload,
+                timeout=20
+            )
+
+            if resp.status_code == 429:
+                time.sleep(3)  # wait and retry
+                continue
+
+            resp.raise_for_status()
+            data = resp.json()
+            return data["candidates"][0]["content"]["parts"][0]["text"].strip()
+
+        except Exception as e:
+            if attempt == 2:
+                return "⚠️ Reply generation is temporarily unavailable. Please try again later."
 
 # ----------------------- UI -----------------------
 st.title("🤖 AI Customer Support Chatbot")
