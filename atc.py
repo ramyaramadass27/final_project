@@ -92,7 +92,12 @@ GEMINI_API_URL = (
 )
 
 # ✅ Load API key securely from Streamlit Secrets
-GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
+GEMINI_API_KEY = st.secrets.get("GEMINI_API_KEY")
+
+if not GEMINI_API_KEY:
+    st.error("❌ GEMINI_API_KEY not found. Please add it in Streamlit Secrets.")
+    st.stop()
+
 
 # ----------------------- Helper Functions -----------------------
 def clean_text(s):
